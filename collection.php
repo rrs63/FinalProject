@@ -27,6 +27,21 @@ abstract class collection {
         $recordsSet =  $statement->fetchAll();
         return $recordsSet[0];
     }
+
+    static public function find($username,$password) {
+
+        $db = dbConn::getConnection();
+        $tableName = get_called_class();    
+        $sql = 'SELECT * FROM ' . $tableName . ' WHERE username = "'.$username.'" AND password ="'.$password.'"';//username =' . $username . ' AND password =' .$password;
+        $statement = $db->prepare($sql);
+        $statement->execute();
+        $class = static::$modelName;
+        $statement->setFetchMode(PDO::FETCH_CLASS, $class);
+        $recordsSet =  $statement->fetchAll();
+        if(count($recordsSet)==0)
+            return null;
+        return $recordsSet[0];
+    }
 }
 
 

@@ -66,8 +66,14 @@ $pageRequest = 'login';
 			htmlTable::displayMessage("Account created successfully<br/>Go back to&nbsp;<a href='https://web.njit.edu/~rrs63/FinalProject/index.php?page=login'>login</a>");		 
         }         
         else if($pageRequest=='login') {
-        	session_start();     
-        	htmlTable::displayMessage("<a href='https://web.njit.edu/~rrs63/FinalProject/index.php?page=logout'>Log out </a>");   	
+        	$record = accounts::find($_POST["username"],$_POST["password"]);
+        	//$record = accounts::find("pateldhiren494","abcd");
+        	if($record==null)
+        		htmlTable::displayMessage("Username or Password incorrect. please try again");
+        	else {	   		
+        		session_start();             	
+        		htmlTable::displayMessage("<a href='https://web.njit.edu/~rrs63/FinalProject/index.php?page=logout'>Log out </a>");   	
+        	}
         	//$_SESSION["username"] = $_POST["username"];
         }
     }
