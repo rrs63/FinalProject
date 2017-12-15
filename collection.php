@@ -3,7 +3,6 @@
 abstract class collection {  
 
     static public function findAll() {
-
         $db = dbConn::getConnection();
         $tableName = get_called_class();
         $sql = 'SELECT * FROM ' . $tableName;
@@ -15,8 +14,19 @@ abstract class collection {
         return $recordsSet;
     }
 
-    static public function findOne($id) {
+    static public function findAllForUser($id) {
+        $db = dbConn::getConnection();
+        $tableName = get_called_class();
+        $sql = 'SELECT * FROM ' . $tableName . ' WHERE ownerid =' . $id;
+        $statement = $db->prepare($sql);
+        $statement->execute();
+        $class = static::$modelName;
+        $statement->setFetchMode(PDO::FETCH_CLASS, $class);
+        $recordsSet =  $statement->fetchAll();
+        return $recordsSet;
+    }
 
+    static public function findOne($id) {
         $db = dbConn::getConnection();
         $tableName = get_called_class();
         $sql = 'SELECT * FROM ' . $tableName . ' WHERE id =' . $id;
@@ -29,7 +39,6 @@ abstract class collection {
     }
 
     static public function find($username,$password) {
-
         $db = dbConn::getConnection();
         $tableName = get_called_class();    
         $sql = 'SELECT * FROM ' . $tableName . ' WHERE username = "'.$username.'" AND password ="'.$password.'"';//username =' . $username . ' AND password =' .$password;
