@@ -71,7 +71,10 @@ $pageRequest = 'login';
         	if($record==null)
         		htmlTable::displayMessage("Username or Password incorrect. please try again");
         	else {	   		
-        		session_start();             	
+        		session_start();      
+                htmlTable::displayTitle("Your todo items");
+                $records = todos::findAll();
+                htmlTable::displayTable($records);       	
         		htmlTable::displayMessage("<a href='https://web.njit.edu/~rrs63/FinalProject/index.php?page=logout'>Log out </a>");   	
         	}
         	//$_SESSION["username"] = $_POST["username"];
