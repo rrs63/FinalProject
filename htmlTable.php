@@ -30,8 +30,8 @@ class htmlTable {
     //displaying header in table
     static public function displayHeader($header) {
         self::$html .= '<tr style="border: 1px solid black;border-collapse: collapse;">';
-        for($x = 0; $x < count($header); $x++) { 
-            self::$html .= '<th style="border: 1px solid black;border-collapse: collapse;">'.$header[$x].'</th>';
+        for($x = 0; $x < count($header); $x++) {                 
+            self::$html .= '<th style="border: 1px solid black;border-collapse: collapse;">'.$header[$x].'</th>';            
         }
         self::$html .= '</tr>';  
 
@@ -40,8 +40,15 @@ class htmlTable {
     //displaying row in table
     static public function displayRecord($record) {
         self::$html .= '<tr style="border: 1px solid black;border-collapse: collapse;">';
-        for($x = 0; $x < count($record); $x++) { 
-            self::$html .= '<td style="border: 1px solid black;border-collapse: collapse;">'.$record[$x].'</td>';
+        for($x = 0; $x < count($record)+2; $x++) { 
+            if($x==count($record)) {
+                self::$html .= '<td style="border: 1px solid black;border-collapse: collapse;"><a href="index.php?page=editTodo&id='.$record[0].'">Edit</a></td>';
+            }   
+            else if($x==count($record)+1) {
+                self::$html .= '<td style="border: 1px solid black;border-collapse: collapse;"><a href="index.php?page=deleteTodo&id='.$record[0].'">Delete</a></td>'; 
+            }   
+            else   
+                self::$html .= '<td style="border: 1px solid black;border-collapse: collapse;">'.$record[$x].'</td>';
         }
         self::$html .= '</tr>'; 
     }

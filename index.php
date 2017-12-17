@@ -57,6 +57,12 @@ $pageRequest = 'login';
         	session_destroy(); 
         	header('Location: index.php?page=login'); 
         }                  
+        else if($pageRequest == 'editTodo') {
+            echo "Edit todo ". $_REQUEST['id'];
+        }
+        else if($pageRequest == 'deleteTodo') {
+            echo "Delete todo ". $_REQUEST['id'];
+        }
     } else {       
     	if($pageRequest=='createAccount') {
 		    $record = new account($_POST["username"],$_POST["email"],$_POST["firstname"],$_POST["lastname"],"","","",$_POST["password"]);
@@ -70,8 +76,8 @@ $pageRequest = 'login';
         	//$record = accounts::find("pateldhiren494","abcd");
         	if($record==null)
         		htmlTable::displayMessage("Username or Password incorrect. please try again");
-        	else {	   		
-        		session_start();                                  
+        	else {	              		
+        		session_start();                                                 
                 htmlTable::displayTitle("Your todo items");
                 $records = todos::findAllForUser($record->id);
                 htmlTable::displayTable($records);       	
