@@ -76,6 +76,23 @@ class page {
         </form>";
 
     }
+
+    public function addtodo() {  
+        $this->html .="<h2>Add todo item</h2>        
+        <form name='addtodo' method='post' action='https://web.njit.edu/~rrs63/FinalProject/index.php?page=addTodo'>          
+        Owner email: <input type='email' name='owneremail'>
+        <br/><br/>       
+        Created date <input type='datetime-local' name='createddate'>
+        <br/><br/>
+        Due date <input type='datetime-local' name='duedate'>
+        <br/><br/>  
+        Message: <input type='text' name='message'>
+        <br/><br/>
+        isDone: <input type='number' min='0' max='1' name='isdone'>
+        <br/><br/>       
+        <input type='submit' name='submit' value='Submit'>  
+        </form>";
+    }     
     public function __destruct() {
         $this->html .= '</body></html>';
         //stringFunctions::printThis($this->html);
