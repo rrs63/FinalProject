@@ -35,6 +35,7 @@ class page {
         <br/><br/>       
         <input type='submit' name='submit' value='Submit'>  
         </form>";
+        $this->html .="Not an account ? <a href = 'https://web.njit.edu/~rrs63/FinalProject/index.php?page=signup'> Sign up </a>";
     }
 
     public function signup() {
@@ -52,7 +53,23 @@ class page {
         <br/><br/>       
         <input type='submit' name='submit' value='Submit'>  
         </form>";
+        $this->html .="Back to <a href = 'https://web.njit.edu/~rrs63/FinalProject/index.php?page=login'> login </a>";
+    }
 
+    public function updateProfile($user) {
+        $this->html .="<h2> Update user profile</h2>        
+        <form name='signup' method='post' action='https://web.njit.edu/~rrs63/FinalProject/index.php?page=updateProfile' onsubmit='return validateForm()'>      
+        First name: <input type='text' name='firstname' value='". $user[3] ."'>
+        <br/><br/>
+        Last name: <input type='text' name='lastname' value='". $user[4] ."'>
+        <br/><br/>  
+        E-mail: <input type='email' name='email' value='". $user[2] ."'>
+        <br/><br/>
+        Password: <input type='password' name='password' value='". $user[8] ."'>
+        <br/><br/>       
+        <input type='submit' name='submit' value='Submit'>          
+        </form>";
+        $this->html .="<a href = 'https://web.njit.edu/~rrs63/FinalProject/index.php?page=displayHomepage'> Cancel </a>";
     }
 
     public function edittodo($record) {        
@@ -74,7 +91,7 @@ class page {
         <br/><br/>       
         <input type='submit' name='submit' value='Submit'>  
         </form>";
-
+        $this->html .="<a href = 'https://web.njit.edu/~rrs63/FinalProject/index.php?page=displayHomepage'> Cancel </a>";
     }
 
     public function addtodo() {  
@@ -92,6 +109,7 @@ class page {
         <br/><br/>       
         <input type='submit' name='submit' value='Submit'>  
         </form>";
+        $this->html .="<a href = 'https://web.njit.edu/~rrs63/FinalProject/index.php?page=displayHomepage'> Cancel </a>";
     }     
     public function __destruct() {
         $this->html .= '</body></html>';

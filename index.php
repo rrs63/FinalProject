@@ -57,14 +57,12 @@ $pageRequest = 'login';
         	session_destroy(); 
         	header('Location: index.php?page=login'); 
         }                  
-        else if($pageRequest == 'editTodo') {
-            echo "Edit todo ". $_REQUEST['id'];
+        else if($pageRequest == 'editTodo') {           
             $record = todos::findOne($_REQUEST['id']);
             $page = new page;
             $page->edittodo($record->getRecord());
         }
-        else if($pageRequest == 'deleteTodo') {
-            echo "Delete todo ". $_REQUEST['id'];
+        else if($pageRequest == 'deleteTodo') {          
             $record = todos::findOne($_REQUEST['id']);
             $record->delete();
             htmlTable::displayTitle("Your todo items");
@@ -72,15 +70,28 @@ $pageRequest = 'login';
             session_start();            
             $records = todos::findAllForUser($_SESSION["userid"]);
             htmlTable::displayTable($records);          
-            htmlTable::displayMessage("<a href='https://web.njit.edu/~rrs63/FinalProject/index.php?page=logout'>Log out </a>"); 
+            htmlTable::displayMessage("<a href='https://web.njit.edu/~rrs63/FinalProject/index.php?page=updateUserProfile'>Update user profile</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href='https://web.njit.edu/~rrs63/FinalProject/index.php?page=addTodo'>Add todo record</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href='https://web.njit.edu/~rrs63/FinalProject/index.php?page=logout'>Log out </a>");  
         }
         else if($pageRequest == 'addTodo') {
             $page = new page;
             $page->addtodo();
+        } 
+        else if($pageRequest == 'updateUserProfile') {
+            $page = new page;
+            session_start();  
+            $user = accounts::findOne($_SESSION["userid"]);
+            $page->updateProfile($user->getRecord());
         }        
+        else if($pageRequest == 'displayHomepage') {
+            session_start();
+            htmlTable::displayTitle("Your todo items");                
+                $records = todos::findAllForUser($_SESSION["userid"]);               
+                htmlTable::displayTable($records);          
+                htmlTable::displayMessage("<a href='https://web.njit.edu/~rrs63/FinalProject/index.php?page=updateUserProfile'>Update user profile</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href='https://web.njit.edu/~rrs63/FinalProject/index.php?page=addTodo'>Add todo record</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href='https://web.njit.edu/~rrs63/FinalProject/index.php?page=logout'>Log out </a>");  
+        }
     } else {       
-    	if($pageRequest=='createAccount') {
-		    $record = new account($_POST["username"],$_POST["email"],$_POST["firstname"],$_POST["lastname"],"","","",$_POST["password"]);
+    	if($pageRequest=='createAccount') {            
+		    $record = new account($_POST["username"],$_POST["email"],$_POST["firstname"],$_POST["lastname"],"","","",password_hash($_POST["password"], PASSWORD_BCRYPT));
 			$savedRecord = $record->save();
 			//savedRecord[0] = Inserted record (All values in row)
 			//savedRecord[1] = id of last inderted record			
@@ -88,16 +99,16 @@ $pageRequest = 'login';
         }         
         else if($pageRequest=='login') {
         	$record = accounts::find($_POST["username"],$_POST["password"]);
-        	//$record = accounts::find("pateldhiren494","abcd");
+        	//$record = accounts::find("pateldhiren494","abcd");            
         	if($record==null)
-        		htmlTable::displayMessage("Username or Password incorrect. please try again");
-        	else {	              		
+        		htmlTable::displayMessage("Username or Password incorrect. please try again.<br/>Back to <a href = 'https://web.njit.edu/~rrs63/FinalProject/index.php?page=login'> login </a>");
+        	else {	                          	
         		session_start();   
                 $_SESSION["userid"] = $record->id;
                 htmlTable::displayTitle("Your todo items");                
-                $records = todos::findAllForUser($record->id);               
+                $records = todos::findAllForUser($_SESSION["userid"]);               
                 htmlTable::displayTable($records);       	
-        		htmlTable::displayMessage("<a href='https://web.njit.edu/~rrs63/FinalProject/index.php?page=addTodo'>Add todo record</a>&nbsp;&nbsp;<a href='https://web.njit.edu/~rrs63/FinalProject/index.php?page=logout'>Log out </a>");                 
+        		htmlTable::displayMessage("<a href='https://web.njit.edu/~rrs63/FinalProject/index.php?page=updateUserProfile'>Update user profile</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href='https://web.njit.edu/~rrs63/FinalProject/index.php?page=addTodo'>Add todo record</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href='https://web.njit.edu/~rrs63/FinalProject/index.php?page=logout'>Log out </a>");                 
         	}
         	//$_SESSION["username"] = $_POST["username"];
         }
@@ -115,7 +126,7 @@ $pageRequest = 'login';
             session_start();            
             $records = todos::findAllForUser($_SESSION["userid"]);
             htmlTable::displayTable($records);          
-            htmlTable::displayMessage("<a href='https://web.njit.edu/~rrs63/FinalProject/index.php?page=logout'>Log out </a>");     
+            htmlTable::displayMessage("<a href='https://web.njit.edu/~rrs63/FinalProject/index.php?page=updateUserProfile'>Update user profile</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href='https://web.njit.edu/~rrs63/FinalProject/index.php?page=addTodo'>Add todo record</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href='https://web.njit.edu/~rrs63/FinalProject/index.php?page=logout'>Log out </a>");     
         }
         else if($pageRequest=='addTodo') { 
             session_start(); 
@@ -125,7 +136,21 @@ $pageRequest = 'login';
             htmlTable::displayMessage("Record added");                    
             $records = todos::findAllForUser($_SESSION["userid"]);
             htmlTable::displayTable($records);          
-            htmlTable::displayMessage("<a href='https://web.njit.edu/~rrs63/FinalProject/index.php?page=logout'>Log out </a>"); 
+            htmlTable::displayMessage("<a href='https://web.njit.edu/~rrs63/FinalProject/index.php?page=updateUserProfile'>Update user profile</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href='https://web.njit.edu/~rrs63/FinalProject/index.php?page=addTodo'>Add todo record</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href='https://web.njit.edu/~rrs63/FinalProject/index.php?page=logout'>Log out </a>");
+        }
+        else if($pageRequest=='updateProfile') { 
+            session_start();      
+            $record = accounts::findOne($_SESSION["userid"]); 
+            $record->email = $_POST["email"];
+            $record->fname = $_POST["firstname"];
+            $record->lname = $_POST["lastname"];
+            $record->password = password_hash($_POST["password"], PASSWORD_BCRYPT);       
+            $record->save();     
+            htmlTable::displayTitle("Your todo items");
+            htmlTable::displayMessage("Your profile updated");        
+            $records = todos::findAllForUser($_SESSION["userid"]);
+            htmlTable::displayTable($records);          
+            htmlTable::displayMessage("<a href='https://web.njit.edu/~rrs63/FinalProject/index.php?page=updateUserProfile'>Update user profile</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href='https://web.njit.edu/~rrs63/FinalProject/index.php?page=addTodo'>Add todo record</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href='https://web.njit.edu/~rrs63/FinalProject/index.php?page=logout'>Log out </a>");
         }
     }
 
