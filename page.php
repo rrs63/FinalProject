@@ -39,7 +39,7 @@ class page {
 
     public function signup() {
     	$this->html .="<h2> Sign up</h2>        
-        <form name='signup' method='post' action='https://web.njit.edu/~rrs63/FinalProject/index.php?page=createAccount' onsubmit='return validateForm()''>   
+        <form name='signup' method='post' action='https://web.njit.edu/~rrs63/FinalProject/index.php?page=createAccount' onsubmit='return validateForm()'>   
         User name: <input type='text' name='username'>
         <br/><br/>     
         E-mail: <input type='email' name='email'>
@@ -49,6 +49,28 @@ class page {
         Last name: <input type='text' name='lastname'>
         <br/><br/>  
         Password: <input type='password' name='password'>
+        <br/><br/>       
+        <input type='submit' name='submit' value='Submit'>  
+        </form>";
+
+    }
+
+    public function edittodo($record) {        
+        $this->html .="<h2>Edit todo item</h2>        
+        <form name='edittodo' method='post' action='https://web.njit.edu/~rrs63/FinalProject/index.php?page=editTodo'>   
+        Id: <input type='number' name='id' readonly value='". $record[0] ."'>
+        <br/><br/>     
+        Owner email: <input type='email' name='owneremail' value='". $record[1] ."'>
+        <br/><br/>
+        Owner id: <input type='number' name='ownerid' readonly value='". $record[2] ."'>
+        <br/><br/>  
+        Created date <input type='datetime-local' name='createddate' value='". $record[3] ."'>
+        <br/><br/>
+        Due date <input type='datetime-local' name='duedate' value='". $record[4] ."'>
+        <br/><br/>  
+        Message: <input type='text' name='message' value='". $record[5] ."'>
+        <br/><br/>
+        isDone: <input type='number' min='0' max='1' name='isdone' value='". $record[6] ."'>
         <br/><br/>       
         <input type='submit' name='submit' value='Submit'>  
         </form>";

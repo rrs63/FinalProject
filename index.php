@@ -59,6 +59,9 @@ $pageRequest = 'login';
         }                  
         else if($pageRequest == 'editTodo') {
             echo "Edit todo ". $_REQUEST['id'];
+            $record = todos::findOne($_REQUEST['id']);
+            $page = new page;
+            $page->edittodo($record->getRecord());
         }
         else if($pageRequest == 'deleteTodo') {
             echo "Delete todo ". $_REQUEST['id'];
@@ -77,13 +80,30 @@ $pageRequest = 'login';
         	if($record==null)
         		htmlTable::displayMessage("Username or Password incorrect. please try again");
         	else {	              		
-        		session_start();                                                 
-                htmlTable::displayTitle("Your todo items");
+        		session_start();   
+                $_SESSION["userid"] = $record->id;
+                htmlTable::displayTitle("Your todo items");                
                 $records = todos::findAllForUser($record->id);
                 htmlTable::displayTable($records);       	
         		htmlTable::displayMessage("<a href='https://web.njit.edu/~rrs63/FinalProject/index.php?page=logout'>Log out </a>");   	
         	}
         	//$_SESSION["username"] = $_POST["username"];
+        }
+        else if($pageRequest=='editTodo') {            
+            htmlTable::displayTitle("Your todo items");  
+            $record = todos::findOne($_POST["id"]);
+            $record->owneremail = $_POST["owneremail"];
+            $record->ownerid = $_POST["ownerid"];
+            $record->createddate = $_POST["createddate"];
+            $record->duedate = $_POST["duedate"];
+            $record->message = $_POST["message"];
+            $record->isdone = $_POST["isdone"];
+            $updatedRecord = $record->save();
+            htmlTable::displayMessage("Record updated");
+            session_start();            
+            $records = todos::findAllForUser($_SESSION["userid"]);
+            htmlTable::displayTable($records);          
+            htmlTable::displayMessage("<a href='https://web.njit.edu/~rrs63/FinalProject/index.php?page=logout'>Log out </a>");     
         }
     }
 
